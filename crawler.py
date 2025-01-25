@@ -7,7 +7,12 @@ from speedPro import scrape_all_pages_speed_pro
 
 def main():
     # Initialize WebDriver for Chrome
-    driver = webdriver.Chrome()
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')  # Run in headless mode (optional)
+    options.add_argument('--disable-gpu')
+    options.add_argument('--no-sandbox')
+
+    driver = webdriver.Chrome(options=options)  # Ensure ChromeDriver is in your PATH
     try:
         print("Attempting racecard scraping...")
         raceUrl = 'https://racing.hkjc.com/racing/information/English/racing/RaceCard.aspx'
