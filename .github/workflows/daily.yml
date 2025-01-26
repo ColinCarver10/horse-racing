@@ -23,7 +23,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run script
-        run: python your_script.py
+        run: python crawler.py
         env:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
