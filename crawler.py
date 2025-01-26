@@ -49,27 +49,9 @@ def main():
         scrape_all_pages_speed_pro(driver, speedProUrl, By, pd, speedProOutputFile)
         print("Finished Speed Pro scraping.")
 
-        # Send email with the files
-        sender_email = os.getenv('SENDER_EMAIL')
-        receiver_email = os.getenv('RECEIVER_EMAIL')
-        subject = f"Today's Horse Racing Information - {today_date}"
-        body = "Please find attached the scraped data files."
-        attachments = [raceOutputFile, trainerOutputFile, jockeyOutputFile, speedProOutputFile]
-        smtp_server = "smtp.gmail.com"
-        smtp_port = 587
-        login = sender_email
-        password = os.getenv('EMAIL_PASSWORD')
-
-        print("Sending email with attachments...")
-        send_email_with_attachments(
-            sender_email, receiver_email, subject, body, attachments, smtp_server, smtp_port, login, password
-        )
-        print("Email sent successfully.")
-
     finally:
         # Quit the driver
         driver.quit()
-        print('done')
 
 
 if __name__ == "__main__":
