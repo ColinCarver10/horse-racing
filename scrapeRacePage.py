@@ -1,5 +1,5 @@
 from utils import save_to_csv_with_sheets
-def scrape_all_pages(driver, url, By, pd):
+def scrape_all_pages(driver, url, By, pd, fileName):
     """
     Scrapes all pages linked within the 'racingNum' class, compiles data from each page, 
     and saves it as a CSV file with separate sheets for each page.
@@ -30,7 +30,7 @@ def scrape_all_pages(driver, url, By, pd):
             all_dataframes.append(df)
 
     # Save all DataFrames to a CSV file with separate sheets
-    save_to_csv_with_sheets(all_dataframes, "race_data.xlsx", pd)
+    save_to_csv_with_sheets(all_dataframes, fileName, pd)
 
 def extract_urls_from_racingNum(driver, By):
     """

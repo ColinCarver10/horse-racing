@@ -3,7 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from utils import save_to_csv_with_sheets
 
-def scrape_all_pages_speed_pro(driver, url, By, pd):
+def scrape_all_pages_speed_pro(driver, url, By, pd, fileName):
     """
     Scrapes all pages linked within the 'race-nav' class, compiles data from each page, 
     and saves it as an Excel file with separate sheets for each page.
@@ -33,7 +33,7 @@ def scrape_all_pages_speed_pro(driver, url, By, pd):
             all_dataframes.append(df)
 
     # Save all DataFrames to an Excel file with separate sheets
-    save_to_csv_with_sheets(all_dataframes, "speed_pro_data.xlsx", pd)
+    save_to_csv_with_sheets(all_dataframes, fileName, pd)
 
 def scrape_speed_pro_page(driver, url, By, pd):
     """

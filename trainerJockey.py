@@ -1,5 +1,5 @@
 from utils import save_to_csv_with_sheets
-def scrape_trainer_jockey(driver, url, By, pd):
+def scrape_trainer_jockey(driver, url, By, pd, file_name):
     """
     Scrapes the trainer ranking table from the provided URL.
     
@@ -38,7 +38,6 @@ def scrape_trainer_jockey(driver, url, By, pd):
 
         #Save to csv
         df = pd.DataFrame(rows, columns=headers)
-        file_name = 'trainer_data.xlsx' if "Trainers" in url else 'jockey_data.xlsx'
         save_to_csv_with_sheets([df], file_name, pd)
 
     except Exception as e:
