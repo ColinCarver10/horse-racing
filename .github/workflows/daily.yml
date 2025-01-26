@@ -1,10 +1,9 @@
-name: Test Daily Script
+name: Horse Data Scraping
 
 on:
   workflow_dispatch:  # Allows manual testing
   schedule:
-    #- cron: '0 0 * * *'  # Scheduled to run daily at midnight UTC
-    - cron: '*/1 * * * *'
+    - cron: '0 0 * * *'  # Scheduled to run daily at midnight UTC
 
 jobs:
   run-script:
