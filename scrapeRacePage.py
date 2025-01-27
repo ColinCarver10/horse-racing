@@ -95,10 +95,10 @@ def scrape_race(driver, url, By, pd):
         # Extract table rows from the inner table's <tbody>
         inner_tbody = inner_table.find_element(By.TAG_NAME, 'tbody')
         for tr in inner_tbody.find_elements(By.TAG_NAME, 'tr'):
-            row = [td.text.strip() for td in tr.find_elements(By.TAG_NAME, 'td') if td.text.strip()]
+            row = [td.text.strip() for td in tr.find_elements(By.TAG_NAME, 'td') if td.value_of_css_property('display') != 'none']
             if row:  # Only append non-empty rows
+                row.pop(2) #Remove colour
                 rows.append(row)
-
         # Create DataFrame from the extracted data
         df = pd.DataFrame(rows, columns=headers)
         return df
