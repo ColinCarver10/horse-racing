@@ -15,11 +15,14 @@ def save_to_csv_with_sheets(dataframes, output_file, pd):
     Returns:
         None
     """
-    with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
-        for i, df in enumerate(dataframes):
-            sheet_name = f"Page_{i + 1}"  # Unique sheet name for each DataFrame
-            df.to_excel(writer, sheet_name=sheet_name, index=False)
-    print(f"Data saved to {output_file}")
+    try:
+        with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
+            for i, df in enumerate(dataframes):
+                sheet_name = f"Page_{i + 1}"  # Unique sheet name for each DataFrame
+                df.to_excel(writer, sheet_name=sheet_name, index=False)
+        print(f"Data saved to {output_file}")
+    except Exception as e:
+        print(f"An error occurred while saving data: {e}")
 
 def send_email_with_attachments(sender_email, receiver_email, subject, body, attachments, smtp_server, smtp_port, login, password):
     # Create the email
