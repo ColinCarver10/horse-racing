@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from scrapeRacePage import scrape_all_pages
 from trainerJockey import scrape_trainer_jockey
 from speedPro import scrape_all_pages_speed_pro
+from pastRaces import scrape_pastRaces
 from utils import send_email_with_attachments
 from dotenv import load_dotenv
 import os
@@ -55,6 +56,12 @@ def main(send_email):
         scrape_all_pages_speed_pro(driver, speedProUrl, By, pd, speedProOutputFile)
         print("Finished Speed Pro scraping.")
 
+        print("Attempting Past Races scraping...")
+        pastRacesUrl = 'https://racing.hkjc.com/racing/information/English/racing/LocalResults.aspx'
+        pastRacesOutputFile = os.path.join(folder_path, f'past_races_data_{today_date}.xlsx')
+        scrape_pastRaces(driver, pastRacesUrl, By, pd, pastRacesOutputFile)
+        print("Finished Past Races scraping.")
+
         if send_email:
             print("Sending data via email...")
             # Send email with the files
@@ -62,7 +69,7 @@ def main(send_email):
             receiver_email = os.getenv('RECEIVER_EMAIL')
             subject = f"Today's Horse Racing Information - {today_date}"
             body = "Please find attached the scraped data files."
-            attachments = [raceOutputFile, trainerOutputFile, jockeyOutputFile, speedProOutputFile]
+            attachments = [pastRacesOutputFile, raceOutputFile, trainerOutputFile, jockeyOutputFile, speedProOutputFile] 
             smtp_server = "smtp.gmail.com"
             smtp_port = 587
             login = sender_email
