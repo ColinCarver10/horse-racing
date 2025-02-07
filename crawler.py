@@ -5,13 +5,14 @@ from selenium.webdriver.common.by import By
 from scrapeRacePage import scrape_all_pages
 from trainerJockey import scrape_trainer_jockey
 from speedPro import scrape_all_pages_speed_pro
-from pastRaces import scrape_pastRaces
-from utils import send_email_with_attachments
+from pastRaces import scrape_pastRaces, extract_dates
+from utils import send_email_with_attachments, save_to_csv_with_sheets
 from dotenv import load_dotenv
 import os
 from datetime import datetime
 
 def main(send_email):
+    print("Setting up web driver, please wait...")
     # Initialize WebDriver for Chrome
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')  # Run in headless mode (optional)
@@ -56,6 +57,16 @@ def main(send_email):
         scrape_all_pages_speed_pro(driver, speedProUrl, By, pd, speedProOutputFile)
         print("Finished Speed Pro scraping.")
 
+        print("Attempting to extract all past race dates.")
+        allDatesUrl = 'https://racing.hkjc.com/racing/information/English/racing/LocalResults.aspx'
+        allDates = extract_dates(driver, By, pd, allDatesUrl)
+        if allDates:
+            save_to_csv_with_sheets(allDates, 'Data/all-past-dates.xlsx', pd)
+        else:
+            print("Unable to save past race dates.")
+
+
+        # CHASE READ THIS: If you want to scrape a specific date then add "?RaceDate=2025/01/31" to the end of pastRacesUrl then use one of the dates from the allDates table above.
         print("Attempting Past Races scraping...")
         pastRacesUrl = 'https://racing.hkjc.com/racing/information/English/racing/LocalResults.aspx'
         pastRacesOutputFile = os.path.join(folder_path, f'past_races_data_{today_date}.xlsx')

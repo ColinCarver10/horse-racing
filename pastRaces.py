@@ -60,6 +60,21 @@ def extract_urls(driver, By):
 
     return urls
 
+def extract_dates(driver, By, pd, url):
+    driver.get(url)
+
+    try:
+        date_select_box = driver.find_element(By.TAG_NAME, 'select')
+        all_dates = [option.text for option in date_select_box.find_elements(By.TAG_NAME, 'option')]
+
+        if all_dates:
+            df = pd.DataFrame(all_dates, columns=["Dates"])
+            return [df]
+        else:
+            print("Unable to extract all past race dates")            
+    except Exception as e:
+        print(f"Error extracting all past race dates: {e}")
+
 def scrape_race(driver, page_url, By, pd):
     try:
         rows = []
@@ -92,6 +107,7 @@ def get_race_info(driver, pd, By):
    try:
        # Find element with specific style
        race_detail_element = driver.find_element(By.CLASS_NAME, "raceMeeting_select")
+       race_tab = get_race_tab(driver, pd, By)
        
        if race_detail_element:
            info = race_detail_element.find_element(By.TAG_NAME, "span").text
@@ -103,5 +119,29 @@ def get_race_info(driver, pd, By):
        return ['No Race Details Found'] + [''] * 11
    
    except Exception as e:
+       print(f"Error extracting race details: {e}")
+       return ['No Race Details Found'] + [''] * 11
+   
+def get_race_tab(driver, pd, By):
+    try:
+        race_tab = driver.find_element(By.CLASS_NAME, "race_tab")
+        table = race_tab.find_element(By.TAG_NAME, "table")
+
+        class_distance = table.find_element(By.XPATH, "//td[contains(text(), 'Class')]").text
+        going = table.find_element(By.XPATH, "//td[contains(text(), 'going')]/following-sibling::td[1]").text
+        course = table.find_element(By.XPATH, "//td[contains(text(), 'course')]/following-sibling::td[1]").text
+
+        time_str = table.find_element(By.XPATH, "//td[contains(text(), 'course')]/following-sibling::td[3]").text
+        time_str = time_str.strip("()")
+        minutes, seconds = time_str.split(":")
+        total_seconds = int(minutes) * 60 + float(seconds)
+
+        sectional_elements = table.find_elements(By.XPATH, "//tr[td[contains(text(), 'Sectional Time :')]]/td[position()>2]")
+        sectional_times = [td.text.split("\n")[0].strip() for td in sectional_elements]
+
+        results = [class_distance, going, course, total_seconds, sectional_times]
+
+
+    except Exception as e:
        print(f"Error extracting race details: {e}")
        return ['No Race Details Found'] + [''] * 11
