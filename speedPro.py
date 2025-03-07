@@ -87,33 +87,31 @@ def scrape_speed_pro_page(driver, url, By, pd):
     
 def extract_urls_from_race_nav(driver, By):
     """
-    Extracts all URLs from <a> tags within elements that have the 'race-nav' class.
+    Extracts all URLs from the 'race-nav' class elements on the page.
 
     Args:
         driver: Selenium WebDriver instance.
         By: Selenium By module.
 
     Returns:
-        list: A list of URLs (strings) extracted from the <a> tags.
+        list: A list of URLs extracted from the 'race-nav' elements.
     """
-    urls = []
-
     try:
-        # Locate all elements with the class 'race-nav'
-        race_nav_elements = driver.find_elements(By.CLASS_NAME, 'race-nav')
-
-        # Iterate over each element and find <a> tags within
-        for element in race_nav_elements:
-            links = element.find_elements(By.TAG_NAME, 'a')
-            for link in links:
-                url = link.get_attribute('href')
-                if url:  # Ensure the URL is not None
-                    urls.append(url)
-
-    except Exception as e:
-        print(f"Error extracting URLs: {e}")
-
-    return urls
+        # Locate the race-nav element
+        race_nav_element = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'race-nav'))
+        )
+        
+        # Extract all anchor tags within the race-nav element
+        links = race_nav_element.find_elements(By.TAG_NAME, 'a')
+        
+        # Get the href attribute from each link
+        urls = [link.get_attribute('href') for link in links if link.get_attribute('href') is not None]
+        
+        return urls
+    except TimeoutException:
+        print("Timeout while waiting for the race-nav element.")
+        return []
 
 def wait_for_element(driver, by, value, timeout=10):
     """

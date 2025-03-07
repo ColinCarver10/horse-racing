@@ -19,8 +19,6 @@ def scrape_pastRaces(driver, url, By, pd, file_name):
     urls.insert(0, url)
     
     print(f"Found {len(urls)} race URLs to scrape")
-    for url in urls:
-        print(f"URL: {url}")
 
     # Initialize a list to store DataFrames
     all_dataframes = []
@@ -32,16 +30,12 @@ def scrape_pastRaces(driver, url, By, pd, file_name):
         
         # Extract race number from URL for logging
         race_num = page_url.split('RaceNo=')[-1] if 'RaceNo=' in page_url else '1'
-        print(f"Scraping Race {race_num}...")
         
         df = scrape_race(driver, page_url, By, pd)
         if not df.empty:  # Only add non-empty DataFrames
-            print(f"Successfully scraped Race {race_num}")
             all_dataframes.append(df)
         else:
             print(f"Failed to scrape Race {race_num}")
-
-    print(f"Total races scraped: {len(all_dataframes)}")
     
     # Save all DataFrames to a CSV file with separate sheets
     save_to_csv_with_sheets(all_dataframes, file_name, pd)
