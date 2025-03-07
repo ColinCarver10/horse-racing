@@ -12,6 +12,7 @@ import os
 from datetime import datetime
 
 def main(send_email):
+    #Adding a comment for git
     print("Setting up web driver, please wait...")
     # Initialize WebDriver for Chrome
     options = webdriver.ChromeOptions()
