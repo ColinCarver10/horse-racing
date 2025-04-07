@@ -12,8 +12,6 @@ This Python project scrapes horse racing data from the official [Hong Kong Jocke
 
 ### Prerequisites
 
-- Python 3.x
-- Internet connection (for scraping)
 - SMTP credentials (for sending email)
 
 ### Installation
