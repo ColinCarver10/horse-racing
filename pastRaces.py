@@ -24,6 +24,7 @@ def scrape_pastRaces(driver, url, By, pd, file_name):
     all_dataframes = []
 
     # Scrape each URL and append the resulting DataFrame to the list
+    urls = [url for url in urls if 'Racecourse=S1' not in url]
     for page_url in urls:
         # Navigate to the race page
         driver.get(page_url)

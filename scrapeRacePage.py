@@ -19,6 +19,9 @@ def scrape_all_pages(driver, url, By, pd, fileName):
     # Extract all URLs from the 'racingNum' class
     urls = extract_urls_from_racingNum(driver, By)
     urls.insert(0, url)
+    
+    # Filter out URLs containing 'Racecourse=S1'
+    urls = [url for url in urls if 'Racecourse=S1' not in url]
 
     # Initialize a list to store DataFrames
     all_dataframes = []
@@ -110,7 +113,7 @@ def scrape_race(driver, url, By, pd):
 def get_race_info(driver, pd, By):
    try:
        # Find element with specific style
-       race_detail_element = driver.find_element(By.XPATH, "//*[@style='line-height: 20px;']")
+       race_detail_element = driver.find_element(By.CLASS_NAME, "f_fs13")
        
        if race_detail_element:
            # Filter lines containing 'turf' or 'all weather track'
