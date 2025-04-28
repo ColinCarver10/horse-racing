@@ -3,6 +3,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 def save_to_csv_with_sheets(dataframes, output_file, pd):
     """
@@ -75,3 +78,25 @@ def test_smtp():
         print(f"SMTP error: {e}")
     except Exception as e:
         print(f"General error: {e}")
+
+def wait_for_element(driver, by, value, timeout=10):
+    """
+    Waits for an element to be present in the DOM and visible.
+
+    Args:
+        driver: Selenium WebDriver instance.
+        by: The locator strategy (e.g., By.ID, By.CLASS_NAME).
+        value: The value of the locator.
+        timeout (int): Maximum wait time in seconds.
+
+    Returns:
+        WebElement: The located element or None if not found.
+    """
+    try:
+        element = WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((by, value))
+        )
+        return element
+    except TimeoutException:
+        print(f"Timeout: Element with {by} = {value} not found within {timeout} seconds.")
+        return None

@@ -1,3 +1,5 @@
 .env
 .DS_Store
 /pycache/*
+__pycache__/
+data/
